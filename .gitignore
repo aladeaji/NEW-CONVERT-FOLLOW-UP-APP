@@ -5,7 +5,12 @@ Desktop.ini
 # Node
 node_modules/
 dist/
-.env
+.env*
+
+# Next.js
+/.next/
+/out/
+/build
 
 # Python
 __pycache__/
@@ -15,3 +20,12 @@ __pycache__/
 # Editors
 .vscode/
 .idea/
+
+# misc
+.DS_Store
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+
+# local DB volumes
+/postgres-data/

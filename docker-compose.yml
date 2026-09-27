@@ -1,0 +1,15 @@
+# Local PostgreSQL for NEW-CONVERT-FOLLOW-UP-APP
+# Usage: docker compose up -d  (requires Docker Desktop)
+# Without Docker: install PostgreSQL 16 natively and use the same DATABASE_URL.
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: followup
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data

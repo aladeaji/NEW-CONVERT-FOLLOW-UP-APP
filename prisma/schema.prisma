@@ -1,0 +1,262 @@
+// Local-first datasource: PostgreSQL on this device
+// (docker-compose.yml, or native Postgres 16). No Supabase.
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  CHURCH_ADMIN
+  COORDINATOR
+  WORKER
+  PASTOR
+}
+
+enum PersonType {
+  NEW_CONVERT
+  FIRST_TIME_VISITOR
+  RETURNING_VISITOR
+  EXISTING_MEMBER
+}
+
+enum JourneyStage {
+  REGISTERED
+  ASSIGNED
+  FIRST_CONTACT
+  ENGAGING
+  ATTENDING
+  GROWING
+  CONNECTED
+  INTEGRATED
+  ACTIVE_MEMBER
+}
+
+enum FollowUpType {
+  CALL
+  WHATSAPP
+  SMS
+  PHYSICAL_VISIT
+  CHURCH_CONVERSATION
+  HOME_VISIT
+  INVITATION
+  PRAYER
+  OTHER
+}
+
+enum ServiceKind {
+  SUNDAY
+  MIDWEEK
+  SPECIAL
+  FELLOWSHIP
+  CLASS
+  OTHER
+}
+
+enum GroupKind {
+  FELLOWSHIP
+  CLASS
+  DEPARTMENT
+}
+
+enum PastoralStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+model Church {
+  id        String   @id @default(cuid())
+  name      String
+  settings  Json?
+  createdAt DateTime @default(now())
+  users     User[]
+  people    Person[]
+  services  AttendanceService[]
+  groups    Group[]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  churchId  String
+  church    Church   @relation(fields: [churchId], references: [id])
+  role      Role     @default(WORKER)
+  name      String
+  email     String   @unique
+  phone     String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  // BetterAuth relations
+  sessions Session[]
+  accounts Account[]
+
+  assignedPeople Person[]           @relation("AssignedWorker")
+  followUps      FollowUp[]
+  raisedCases    PastoralCase[]     @relation("RaisedBy")
+  events         ActivityEvent[]
+  attendanceTaken AttendanceRecord[] @relation("RecordedBy")
+
+  @@index([churchId])
+}
+
+// ---- BetterAuth tables ----
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Account {
+  id       String @id @default(cuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider String
+  password String?
+  createdAt DateTime @default(now())
+}
+
+model Verification {
+  id        String   @id @default(cuid())
+  identifier String
+  value     String
+  expiresAt DateTime
+
+  @@unique([identifier, value])
+}
+
+// ---- Core domain ----
+model Person {
+  id               String        @id @default(cuid())
+  churchId         String
+  church           Church        @relation(fields: [churchId], references: [id])
+  branchId         String?
+  fullName         String
+  phone            String
+  personType       PersonType    @default(NEW_CONVERT)
+  visitDate        DateTime
+  ageGroup         String?
+  gender           String?
+  area             String?
+  howCame          String?
+  notes            String?
+  fellowshipId     String?
+  fellowship       Group?        @relation(fields: [fellowshipId], references: [id])
+  photoKey         String?
+  journeyStage     JourneyStage  @default(REGISTERED)
+  nextAction       String?
+  nextFollowUpAt   DateTime?
+  assignedWorkerId String?
+  assignedWorker   User?         @relation("AssignedWorker", fields: [assignedWorkerId], references: [id])
+  createdAt        DateTime      @default(now())
+
+  assignments Assignment[]
+  followUps   FollowUp[]
+  attendance  AttendanceRecord[]
+  cases       PastoralCase[]
+  events      ActivityEvent[]
+  memberships Membership[]
+
+  @@unique([churchId, phone])
+  @@index([churchId])
+  @@index([assignedWorkerId])
+}
+
+model Assignment {
+  id         String   @id @default(cuid())
+  personId   String
+  person     Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  workerId   String
+  assignedBy String
+  assignedAt DateTime @default(now())
+  active     Boolean  @default(true)
+}
+
+model FollowUp {
+  id        String       @id @default(cuid())
+  personId  String
+  person    Person       @relation(fields: [personId], references: [id], onDelete: Cascade)
+  workerId  String
+  worker    User         @relation(fields: [workerId], references: [id])
+  date      DateTime     @default(now())
+  type      FollowUpType @default(CALL)
+  outcome   String?
+  notes     String?
+  concerns  String?
+  nextAction String?
+  nextDate  DateTime?
+}
+
+model AttendanceService {
+  id        String      @id @default(cuid())
+  churchId  String
+  church    Church      @relation(fields: [churchId], references: [id])
+  name      String
+  date      DateTime
+  kind      ServiceKind @default(SUNDAY)
+  records   AttendanceRecord[]
+}
+
+model AttendanceRecord {
+  id         String            @id @default(cuid())
+  serviceId  String
+  service    AttendanceService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  personId   String
+  person     Person            @relation(fields: [personId], references: [id], onDelete: Cascade)
+  present    Boolean           @default(true)
+  recordedBy String
+  recorder   User              @relation("RecordedBy", fields: [recordedBy], references: [id])
+
+  @@unique([serviceId, personId])
+}
+
+model Group {
+  id        String    @id @default(cuid())
+  churchId  String
+  church    Church    @relation(fields: [churchId], references: [id])
+  kind      GroupKind @default(FELLOWSHIP)
+  name      String
+  members   Membership[]
+  fellows   Person[]
+}
+
+model Membership {
+  id       String @id @default(cuid())
+  personId String
+  person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+  groupId  String
+  group    Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([personId, groupId])
+}
+
+model PastoralCase {
+  id         String         @id @default(cuid())
+  personId   String
+  person     Person         @relation(fields: [personId], references: [id], onDelete: Cascade)
+  raisedBy   String
+  raiser     User           @relation("RaisedBy", fields: [raisedBy], references: [id])
+  reason     String
+  status     PastoralStatus @default(OPEN)
+  resolution String?
+  createdAt  DateTime       @default(now())
+}
+
+model ActivityEvent {
+  id        String   @id @default(cuid())
+  personId  String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  actorId   String
+  actor     User     @relation(fields: [actorId], references: [id])
+  type      String
+  payload   Json?
+  at        DateTime @default(now())
+
+  @@index([personId])
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System — New Convert Follow-up App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--navy:#1A2B4A;--navy2:#243document;--green:#16a34a;--amber:#d97706;--red:#dc2626;--bg:#f4f6fb;--card:#fff;--muted:#64748b;--line:#e5e9f2;--radius:10px}
+*{box-sizing:border-box}body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:#0f172a;margin:0}
+.top{background:var(--navy);color:#fff;padding:28px 24px}
+.top h1{margin:0;font-size:26px;font-weight:800}.top p{opacity:.85;margin:6px 0 0}
+.wrap{max-width:1100px;margin:0 auto;padding:24px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+h2{font-size:18px;margin:28px 0 12px}h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}.sw{width:110px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}.sw div{height:56px}.sw span{display:block;font-size:12px;padding:6px 8px;background:#fff}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:10px;padding:12px 16px;font-weight:600;font-size:14px;cursor:pointer;min-height:44px}
+.btn-p{background:var(--navy);color:#fff}.btn-g{background:var(--green);color:#fff}.btn-o{background:#fff;border:1px solid var(--line)}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
+.b-due{background:#fef3c7;color:#92400e}.b-over{background:#fee2e2;color:#991b1b}.b-ok{background:#dcfce7;color:#166534}.b-past{background:#ede9fe;color:#5b21b6}.b-new{background:#dbeafe;color:#1e40af}
+.nav{display:flex;gap:8px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px}
+.nav a{padding:10px 14px;border-radius:8px;text-decoration:none;color:var(--navy);font-weight:600;font-size:14px;background:#eef2ff}
+.nav a.on{background:var(--navy);color:#fff}
+.today{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.today .t{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}.today .n{font-size:26px;font-weight:800}.today .l{font-size:13px;color:var(--muted)}
+.person{display:flex;gap:12px;align-items:center}.avatar{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:8px;border-bottom:1px solid var(--line)}td{padding:10px 8px;border-bottom:1px solid var(--line)}
+.tl{border-left:3px solid var(--line);margin-left:8px;padding-left:16px}.tl div{margin:0 0 14px;position:relative}.tl div:before{content:'';position:absolute;left:-23px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--navy)}
+small{color:var(--muted)}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:15px;min-height:44px}
+.step{display:flex;gap:6px;flex-wrap:wrap}.step span{font-size:12px;padding:6px 10px;border-radius:999px;background:#eef2ff;font-weight:600}.step span.done{background:var(--navy);color:#fff}.step span.now{background:var(--amber);color:#fff}
+.phone{max-width:380px;margin:0 auto;border:10px solid #0f172a;border-radius:28px;overflow:hidden;background:#fff}
+.phone .ph{background:var(--navy);color:#fff;padding:16px}.phone .pb{padding:14px}
+</style>
+</head>
+<body>
+<div class="top"><h1>New Convert Follow-up — Design System</h1><p>Simple · Action-before-information · People, not numbers</p></div>
+<div class="wrap">
+
+<h2>1. Tokens — color & type</h2>
+<div class="card"><h3>Colors</h3><div class="swatches">
+<div class="sw"><div style="background:#1A2B4A"></div><span>Navy primary</span></div>
+<div class="sw"><div style="background:#16a34a"></div><span>Action green</span></div>
+<div class="sw"><div style="background:#d97706"></div><span>Warn amber</span></div>
+<div class="sw"><div style="background:#dc2626"></div><span>Danger red</span></div>
+<div class="sw"><div style="background:#ede9fe"></div><span>Pastoral violet</span></div>
+<div class="sw"><div style="background:#f4f6fb;border-bottom:1px solid #e5e9f2"></div><span>App bg</span></div>
+</div><p>Font: Inter — clear headings and body text, comfortable reading size, big buttons for phones.</p></div>
+
+<h2>2. Navigation</h2>
+<div class="nav"><a class="on" href="#">Today</a><a href="#">People</a><a href="#">Follow-ups</a><a href="#">Attendance</a><a href="#">Workers</a><a href="#">Groups</a><a href="#">Reports</a><a href="#">Alerts</a><a href="#">Settings</a></div>
+<p><small>Workers see reduced: Today → My People → Follow-up → Attendance.</small></p>
+
+<h2>3. Badges & buttons</h2>
+<div class="grid g2">
+<div class="card"><h3>Attention badges</h3>
+<span class="badge b-ok">On Track</span> <span class="badge b-due">Due</span> <span class="badge b-over">Overdue</span> <span class="badge b-new">New</span> <span class="badge b-past">Pastoral</span> <span class="badge b-due">Declining</span> <span class="badge b-over">Missing</span>
+<p style="margin-top:12px"><button class="btn btn-p">Record follow-up</button> <button class="btn btn-g">Call / WhatsApp</button> <button class="btn btn-o">Schedule next</button></p></div>
+<div class="card"><h3>Journey stepper</h3><div class="step"><span class="done">Registered</span><span class="done">Assigned</span><span class="now">First Contact</span><span>Engaging</span><span>Attending</span><span>Growing</span><span>Connected</span><span>Integrated</span></div></div>
+</div>
+
+<h2>4. Worker Today</h2>
+<div class="today"><div class="t"><div class="n">5</div><div class="l">Due today</div></div><div class="t"><div class="n" style="color:var(--red)">2</div><div class="l">Overdue</div></div><div class="t"><div class="n">3</div><div class="l">Awaiting first contact</div></div><div class="t"><div class="n">2</div><div class="l">Attendance concerns</div></div></div>
+<div class="grid g2" style="margin-top:12px">
+<div class="card"><h3>My people</h3><div class="person"><div class="avatar">JO</div><div><b>John Obi</b> <span class="badge b-over">Overdue</span><br><small>Assigned to Peter · Next: Call tomorrow</small></div></div><hr style="border:0;border-top:1px solid var(--line)"><div class="person"><div class="avatar">SA</div><div><b>Sarah Ade</b> <span class="badge b-due">Due</span><br><small>Missed last 2 Sundays → may need follow-up</small></div></div></div>
+<div class="card"><h3>Unassigned queue</h3><table><tr><th>Name</th><th>Waiting</th><th></th></tr><tr><td>Mary K.</td><td>3 days</td><td><span class="badge b-over">Urgent</span></td></tr><tr><td>David E.</td><td>1 day</td><td><span class="badge b-new">New</span></td></tr></table></div>
+</div>
+
+<h2>5. Person profile + timeline</h2>
+<div class="grid g2">
+<div class="card"><h3>Profile</h3><p><b>John Obi</b> · New Convert · 0803… · Age 20–29 · Area: Lekki</p><p><small>Worker: Peter · Stage: Engaging · Last contact Sep 22 · Next: Call Sep 28</small></p><p><input placeholder="Next action — e.g. Call John tomorrow"></p></div>
+<div class="card"><h3>Timeline</h3><div class="tl"><div><b>Sep 21</b> — Registered; assigned to Peter</div><div><b>Sep 22</b> — First contact recorded</div><div><b>Sep 25</b> — Attended Sunday service</div><div><b>Sep 28</b> — Follow-up due</div></div></div>
+</div>
+
+<h2>6. Phone preview</h2>
+<div class="phone"><div class="ph"><b>Today</b><br><small>Who needs my attention?</small></div><div class="pb"><p><span class="badge b-over">2 Overdue</span> <span class="badge b-due">5 Due</span></p><div class="card" style="margin:0 0 10px"><b>John Obi</b><br><small>Call tomorrow · Missed 2 services</small><br><br><button class="btn btn-p" style="width:100%;justify-content:center">Open & record</button></div><div class="card" style="margin:0"><b>Sarah Ade</b><br><small>Invite to Sunday service</small></div></div></div>
+
+<p style="margin:30px 0"><small>Full spec: IMPLEMENTATION_PLAN.md. Next: build as Tailwind + shadcn in Next.js.</small></p>
+</div>
+</body>
+</html>
