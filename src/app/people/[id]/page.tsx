@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/session";
 import { getPerson } from "@/lib/people";
 import AssignCard from "./AssignCard";
 import FollowUpCard from "./FollowUpCard";
+import { attendanceHistory } from "@/lib/attendance";
 
 const CAN_ASSIGN = ["SUPER_ADMIN", "CHURCH_ADMIN", "COORDINATOR"];
 
@@ -46,6 +47,8 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
     : [];
 
   const stageIdx = STAGES.indexOf(person.journeyStage);
+  const history = await attendanceHistory(person.id);
+  const attended = history.filter((h) => h.present).length;
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-3 px-6 py-10">
@@ -134,6 +137,21 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
             </li>
           ))}
         </ol>
+      </Section>
+
+      <Section title="Attendance">
+        <p className="text-sm">
+          Attended {attended} of last {history.length} recorded.
+        </p>
+        {history.slice(0, 5).map((h) => (
+          <p key={h.id} className="text-sm text-slate-500">
+            {h.present ? "✓" : "✗"} {h.service.name} ·{" "}
+            {new Date(h.service.date).toLocaleDateString()}
+          </p>
+        ))}
+        {history.length === 0 && (
+          <p className="text-sm text-slate-500">No attendance recorded yet.</p>
+        )}
       </Section>
 
       <Section title="Care">
