@@ -7,4 +7,13 @@ export const auth = betterAuth({
   emailAndPassword: { enabled: true },
   baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
   secret: process.env.BETTER_AUTH_SECRET,
+  user: {
+    additionalFields: {
+      role: { type: "string", required: false },
+      churchId: { type: "string", required: false },
+      phone: { type: "string", required: false },
+    },
+  },
 });
+
+export type Session = typeof auth.$Infer.Session;
