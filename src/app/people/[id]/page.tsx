@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { getPerson } from "@/lib/people";
 import AssignCard from "./AssignCard";
+import FollowUpCard from "./FollowUpCard";
 
 const CAN_ASSIGN = ["SUPER_ADMIN", "CHURCH_ADMIN", "COORDINATOR"];
 
@@ -98,6 +99,42 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
         workers={workers}
         canAssign={CAN_ASSIGN.includes(me.role)}
       />
+
+      <FollowUpCard
+        personId={person.id}
+        phone={person.phone}
+        currentStage={person.journeyStage}
+        canRecord={
+          CAN_ASSIGN.includes(me.role) || person.assignedWorker?.id === me.id
+        }
+      />
+
+      <Section title="Follow-up history">
+        {person.followUps.length === 0 && (
+          <p className="text-sm text-slate-500">No contacts recorded yet.</p>
+        )}
+        <ol className="flex flex-col gap-3">
+          {person.followUps.map((f) => (
+            <li key={f.id} className="border-b border-slate-100 pb-2">
+              <p className="font-semibold">
+                {f.type.replace(/_/g, " ")} ·{" "}
+                {new Date(f.date).toLocaleDateString()}
+              </p>
+              {f.outcome && <p className="text-sm">{f.outcome}</p>}
+              {f.notes && <p className="text-sm text-slate-500">{f.notes}</p>}
+              {f.nextAction && (
+                <p className="text-sm text-slate-500">
+                  Next: {f.nextAction}
+                  {f.nextDate
+                    ? ` · ${new Date(f.nextDate).toLocaleDateString()}`
+                    : ""}
+                </p>
+              )}
+              <p className="text-xs text-slate-400">by {f.worker.name}</p>
+            </li>
+          ))}
+        </ol>
+      </Section>
 
       <Section title="Care">
         <p className="text-sm">{person.notes ?? "No notes yet."}</p>
