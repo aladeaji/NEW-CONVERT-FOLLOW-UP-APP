@@ -3,6 +3,9 @@ import { notFound, redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { getPerson } from "@/lib/people";
+import AssignCard from "./AssignCard";
+
+const CAN_ASSIGN = ["SUPER_ADMIN", "CHURCH_ADMIN", "COORDINATOR"];
 
 const STAGES = [
   "REGISTERED",
@@ -33,6 +36,13 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
   const { id } = await params;
   const person = await getPerson(me.churchId, id);
   if (!person) notFound();
+  const workers = CAN_ASSIGN.includes(me.role)
+    ? await db.user.findMany({
+        where: { churchId: me.churchId, active: true },
+        select: { id: true, name: true },
+        orderBy: { name: "asc" },
+      })
+    : [];
 
   const stageIdx = STAGES.indexOf(person.journeyStage);
 
@@ -81,6 +91,13 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
             : ""}
         </p>
       </Section>
+
+      <AssignCard
+        personId={person.id}
+        currentWorkerId={person.assignedWorker?.id ?? null}
+        workers={workers}
+        canAssign={CAN_ASSIGN.includes(me.role)}
+      />
 
       <Section title="Care">
         <p className="text-sm">{person.notes ?? "No notes yet."}</p>

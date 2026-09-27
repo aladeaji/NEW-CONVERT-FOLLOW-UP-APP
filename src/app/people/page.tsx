@@ -34,12 +34,20 @@ export default async function PeoplePage({
     <main className="mx-auto w-full max-w-3xl px-6 py-10">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-extrabold text-[#1A2B4A]">People</h1>
-        <Link
-          href="/people/new"
-          className="rounded-[10px] bg-[#1A2B4A] px-4 py-3 text-sm font-semibold text-white"
-        >
-          + Register
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href="/unassigned"
+            className="rounded-[10px] border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[#1A2B4A]"
+          >
+            Unassigned
+          </Link>
+          <Link
+            href="/people/new"
+            className="rounded-[10px] bg-[#1A2B4A] px-4 py-3 text-sm font-semibold text-white"
+          >
+            + Register
+          </Link>
+        </div>
       </div>
 
       <form method="get" className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
