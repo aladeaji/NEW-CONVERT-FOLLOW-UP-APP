@@ -5,7 +5,9 @@ import { requireUser } from "@/lib/session";
 import { getPerson } from "@/lib/people";
 import AssignCard from "./AssignCard";
 import FollowUpCard from "./FollowUpCard";
+import PastoralCard from "./PastoralCard";
 import { attendanceHistory } from "@/lib/attendance";
+import { openCaseForPerson } from "@/lib/pastoral";
 
 const CAN_ASSIGN = ["SUPER_ADMIN", "CHURCH_ADMIN", "COORDINATOR"];
 
@@ -49,6 +51,10 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
   const stageIdx = STAGES.indexOf(person.journeyStage);
   const history = await attendanceHistory(person.id);
   const attended = history.filter((h) => h.present).length;
+  const openCase = await openCaseForPerson(person.id);
+  const canFlag =
+    ["SUPER_ADMIN", "CHURCH_ADMIN", "COORDINATOR", "PASTOR"].includes(me.role) ||
+    person.assignedWorker?.id === me.id;
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-3 px-6 py-10">
@@ -153,6 +159,8 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
           <p className="text-sm text-slate-500">No attendance recorded yet.</p>
         )}
       </Section>
+
+      <PastoralCard personId={person.id} openCase={openCase} canFlag={canFlag} />
 
       <Section title="Care">
         <p className="text-sm">{person.notes ?? "No notes yet."}</p>
