@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -56,9 +57,9 @@ export default function SignInPage() {
         >
           {busy ? "Signing in…" : "Sign in"}
         </button>
-        <a href="/sign-up" className="text-center text-sm font-semibold text-[#1A2B4A]">
+        <Link href="/sign-up" className="text-center text-sm font-semibold text-[#1A2B4A]">
           No account? Set up your church
-        </a>
+        </Link>
       </form>
     </main>
   );
