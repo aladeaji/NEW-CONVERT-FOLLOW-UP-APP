@@ -29,3 +29,6 @@ next-env.d.ts
 
 # local DB volumes
 /postgres-data/
+
+# Local Netlify folder
+.netlify
