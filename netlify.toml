@@ -3,7 +3,9 @@
 # Build settings below are picked up automatically. Then add the env vars
 # listed in .env.example under "NETLIFY (production)" and Deploy.
 [build]
-  command = "prisma migrate deploy && prisma generate && next build"
+  # Applies DB migrations when DATABASE_URL points at a real database;
+  # skips gracefully until one is configured (landing page still goes live).
+  command = "prisma migrate deploy || echo 'no reachable database, skipping migrate' && prisma generate && next build"
   publish = ".next"
 
 [build.environment]
