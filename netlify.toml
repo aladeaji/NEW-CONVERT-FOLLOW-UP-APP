@@ -1,0 +1,10 @@
+# Netlify deploy config for NEW-CONVERT-FOLLOW-UP-APP
+# Dashboard: Add new site -> Import an existing project -> GitHub -> select repo.
+# Build settings below are picked up automatically. Then add the env vars
+# listed in .env.example under "NETLIFY (production)" and Deploy.
+[build]
+  command = "prisma migrate deploy && prisma generate && next build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "24"
