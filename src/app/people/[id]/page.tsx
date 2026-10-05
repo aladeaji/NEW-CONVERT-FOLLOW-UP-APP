@@ -162,6 +162,18 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
 
       <PastoralCard personId={person.id} openCase={openCase} canFlag={canFlag} />
 
+      <Section title="Connection">
+        {person.memberships.length === 0 ? (
+          <p className="text-sm text-slate-500">Not connected to any group yet.</p>
+        ) : (
+          person.memberships.map((m) => (
+            <p key={m.group.id} className="text-sm">
+              {m.group.name} · {m.group.kind}
+            </p>
+          ))
+        )}
+      </Section>
+
       <Section title="Care">
         <p className="text-sm">{person.notes ?? "No notes yet."}</p>
       </Section>

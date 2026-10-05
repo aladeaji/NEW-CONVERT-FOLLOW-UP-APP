@@ -58,6 +58,7 @@ export async function getPerson(churchId: string, id: string) {
     include: {
       assignedWorker: { select: { id: true, name: true } },
       events: { orderBy: { at: "desc" }, take: 50 },
+      memberships: { include: { group: { select: { id: true, name: true, kind: true } } } },
       followUps: {
         orderBy: { date: "desc" },
         take: 20,

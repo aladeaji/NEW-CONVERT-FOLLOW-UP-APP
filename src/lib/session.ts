@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { db } from "./db";
 import { auth } from "./auth";
 
 export type ChurchRole =
@@ -16,6 +17,11 @@ export async function getSession() {
 export async function requireUser() {
   const session = await getSession();
   if (!session?.user) redirect("/sign-in");
+  const me = await db.user.findUnique({
+    where: { id: session.user.id },
+    select: { active: true },
+  });
+  if (me && !me.active) redirect("/deactivated");
   return session;
 }
 
