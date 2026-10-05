@@ -36,6 +36,12 @@ export default async function PeoplePage({
         <h1 className="text-2xl font-extrabold text-[#1A2B4A]">People</h1>
         <div className="flex gap-2">
           <Link
+            href="/people/import"
+            className="rounded-[10px] border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[#1A2B4A]"
+          >
+            Import
+          </Link>
+          <Link
             href="/unassigned"
             className="rounded-[10px] border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[#1A2B4A]"
           >
