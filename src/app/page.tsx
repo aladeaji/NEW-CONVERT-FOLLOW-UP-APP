@@ -11,6 +11,7 @@ const SECTIONS: [string, string, string][] = [
   ["Dashboard", "Church-wide health", "/admin"],
   ["Workers", "Team and workloads", "/workers"],
   ["Groups", "Fellowships and classes", "/groups"],
+  ["Reports", "Follow-up and retention", "/reports"],
 ];
 
 export default function Home() {
