@@ -185,6 +185,7 @@ model Person {
   @@unique([churchId, phone])
   @@index([churchId])
   @@index([assignedWorkerId])
+  @@index([nextFollowUpAt])
 }
 
 model Assignment {
@@ -195,6 +196,8 @@ model Assignment {
   assignedBy String
   assignedAt DateTime @default(now())
   active     Boolean  @default(true)
+
+  @@index([personId])
 }
 
 model FollowUp {
@@ -210,6 +213,9 @@ model FollowUp {
   concerns  String?
   nextAction String?
   nextDate  DateTime?
+
+  @@index([personId])
+  @@index([workerId])
 }
 
 model AttendanceService {
@@ -233,6 +239,7 @@ model AttendanceRecord {
   recorder   User              @relation("RecordedBy", fields: [recordedBy], references: [id])
 
   @@unique([serviceId, personId])
+  @@index([personId])
 }
 
 model Group {
