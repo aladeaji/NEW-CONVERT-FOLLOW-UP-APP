@@ -17,13 +17,17 @@ export default function ChecklistForm({
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  function toggle(id: string) {
-    setPresent((prev) => {
+  function toggle(id: string) {    setPresent((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
     });
+    setSaved(false);
+  }
+
+  function markAll() {
+    setPresent(new Set(rows.map((r) => r.id)));
     setSaved(false);
   }
 
@@ -47,13 +51,21 @@ export default function ChecklistForm({
         <p className="text-sm text-slate-500">
           {present.size} of {rows.length} present
         </p>
-        <button
-          onClick={save}
-          disabled={busy}
-          className="min-h-[44px] rounded-[10px] bg-[#1A2B4A] px-6 font-semibold text-white disabled:opacity-60"
-        >
-          {busy ? "Saving…" : saved ? "Saved ✓" : "Save"}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={markAll}
+            className="min-h-[44px] rounded-[10px] border border-slate-200 bg-white px-4 text-sm font-semibold text-[#1A2B4A]"
+          >
+            All present
+          </button>
+          <button
+            onClick={save}
+            disabled={busy}
+            className="min-h-[44px] rounded-[10px] bg-[#1A2B4A] px-6 font-semibold text-white disabled:opacity-60"
+          >
+            {busy ? "Saving…" : saved ? "Saved ✓" : "Save"}
+          </button>
+        </div>
       </div>
       <ul className="mt-3 flex flex-col gap-2">
         {rows.map((r) => (

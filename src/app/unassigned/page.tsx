@@ -3,6 +3,9 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { unassignedList } from "@/lib/assignment";
+import BulkAssignBar from "./BulkAssignBar";
+
+const CAN_ASSIGN = ["SUPER_ADMIN", "CHURCH_ADMIN", "COORDINATOR"];
 
 function waitDays(from: Date) {
   return Math.floor((Date.now() - from.getTime()) / 86400000);
@@ -14,6 +17,14 @@ export default async function UnassignedPage() {
   if (!me?.churchId) redirect("/setup");
 
   const people = await unassignedList(me.churchId);
+  const canAssign = CAN_ASSIGN.includes(me.role);
+  const workers = canAssign
+    ? await db.user.findMany({
+        where: { churchId: me.churchId, active: true },
+        select: { id: true, name: true },
+        orderBy: { name: "asc" },
+      })
+    : [];
 
   return (
     <main className="mx-auto w-full max-w-2xl px-6 py-10">
@@ -26,6 +37,11 @@ export default async function UnassignedPage() {
       <p className="mt-1 text-sm text-slate-500">
         No one here should disappear — assign every person a worker.
       </p>
+      {canAssign && people.length > 0 && (
+        <div className="mt-4">
+          <BulkAssignBar people={people} workers={workers} />
+        </div>
+      )}
       <ul className="mt-4 flex flex-col gap-2">
         {people.map((p) => {
           const days = waitDays(new Date(p.createdAt));
