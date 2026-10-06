@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
+import InstallButton from "@/components/InstallButton";
 
 const LEADERSHIP = ["SUPER_ADMIN", "CHURCH_ADMIN", "COORDINATOR", "PASTOR"];
 const MANAGERS = ["SUPER_ADMIN", "CHURCH_ADMIN", "COORDINATOR"];
@@ -31,6 +32,9 @@ export default async function MenuPage() {
   return (
     <main className="mx-auto w-full max-w-2xl px-6 py-10">
       <h1 className="text-2xl font-extrabold text-[#1A2B4A]">Menu</h1>
+      <div className="mt-3">
+        <InstallButton />
+      </div>
       <div className="mt-4 flex flex-col gap-2 pb-20">
         {items.map(([label, href]) => (
           <Link

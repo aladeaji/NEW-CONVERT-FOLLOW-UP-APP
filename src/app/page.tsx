@@ -1,4 +1,5 @@
 import Link from "next/link";
+import InstallButton from "@/components/InstallButton";
 
 const SECTIONS: [string, string, string][] = [
   ["Today", "Who needs your attention?", "/today"],
@@ -38,6 +39,7 @@ export default function Home() {
           >
             Set up your church
           </Link>
+          <InstallButton />
         </div>
       </header>
       <main className="flex-1 rounded-t-3xl bg-[#f4f6fb] px-6 py-8">
