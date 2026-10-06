@@ -36,6 +36,20 @@ export default async function TodayPage() {
       <h1 className="mt-1 text-2xl font-extrabold text-[#1A2B4A]">
         Who needs your attention?
       </h1>
+      <div className="mt-3 flex gap-2">
+        <Link
+          href="/people/new"
+          className="min-h-[44px] flex-1 rounded-[10px] bg-[#1A2B4A] px-4 py-3 text-center text-sm font-bold text-white"
+        >
+          + Register person
+        </Link>
+        <Link
+          href="/attendance"
+          className="min-h-[44px] flex-1 rounded-[10px] border border-slate-200 bg-white px-4 py-3 text-center text-sm font-bold text-[#1A2B4A]"
+        >
+          Take attendance
+        </Link>
+      </div>
       {churchWide && unassigned > 0 && (
         <Link
           href="/unassigned"
